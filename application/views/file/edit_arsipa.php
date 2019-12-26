@@ -37,7 +37,9 @@ $_user = &get_instance();
                                 </div>
                                 <div class="form-group row" id="btn-pc">
                                     <div class="col">
-                                        <input type="file" name="image" class="form-control">
+                                        <!-- <input type="file" name="image" class="form-control"> -->
+                                        <div id="customupload1">Upload</div>
+                                        <label for="file-7"><span id="span_input">File Saat Ini : <b><?php echo $menu['loc_file']; ?></b></span> </label>
                                     </div>
                                 </div>
 
@@ -53,7 +55,7 @@ $_user = &get_instance();
                                     </div>
                                 </div>
                                 <hr>
-                                <button type="submit" class="btn btn-primary mt-4 pr-4 pl-4">Simpan</button>
+                                <button type="submit" id="btn_upload" class="btn btn-primary mt-4 pr-4 pl-4">Simpan</button>
                                 <a href="<?= base_url('file_arsip/tampilfile') . '?menuId=' . $menu['menu_id']; ?>" class="btn btn-danger mt-4 pr-4 pl-4">Kembali</a>
                             </form>
                         </div>

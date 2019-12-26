@@ -77,6 +77,53 @@ class File_arsip extends Public_Controller
         return $parent;
     }
 
+    function upload()
+    {
+        $output_dir = "./upload/";
+        $fileName = $_FILES["file"];
+        $this->session->set_userdata('filename', $fileName);
+        if (isset($fileName)) {
+            $ret = array();
+            $error = $_FILES["file"]["error"];
+            $name = $_FILES["file"];
+            // if (file_exists("./upload/" . $name)) {
+            //   unlink("./upload/" . $name);
+            //   echo "<font face='Verdana' size='2' >Last Uploaded File has been removed from uploads folder<br>back to uploadform agian and upload your file<br>";
+            // }
+            if (!is_array($_FILES["file"]["name"])) //single file
+            {
+                $fileName = $_FILES["file"]["name"];
+                move_uploaded_file($_FILES["file"]["tmp_name"], $output_dir . $fileName);
+                $ret[] = $fileName;
+            } else  //Multiple files, file[]
+            {
+                $fileCount = count($_FILES["file"]["name"]);
+                for ($i = 0; $i < $fileCount; $i++) {
+                    $fileName = $_FILES["file"]["name"][$i];
+                    move_uploaded_file($_FILES["file"]["tmp_name"][$i], $output_dir . $fileName);
+                    $ret[] = $fileName;
+                }
+            }
+            echo json_encode($ret);
+        }
+    }
+
+    public function delfile()
+    {
+        $output_dir = "./upload/";
+        if (isset($_POST["op"]) && $_POST["op"] == "delete" && isset($_POST['name'])) {
+            $fileName = $_POST['name'];
+            $fileName = str_replace("..", ".", $fileName); //required. if somebody is trying parent folder files	
+            $filePath = $output_dir . $fileName;
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
+            $this->session->unset_userdata('filename');
+            echo "Deleted File " . $fileName . "<br>";
+        }
+    }
+
+
     public function add_arsipa()
     {
         $data['title'] = 'Tambah Arsip';

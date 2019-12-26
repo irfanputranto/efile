@@ -10,7 +10,7 @@
 <!-- page container area end -->
 
 <!-- jquery latest version -->
-<script src="<?= base_url('assets/'); ?>js/vendor/jquery-2.2.4.min.js"></script>
+<script src="<?= base_url('assets/'); ?>js/jquery-3.2.1.js"></script>
 <!-- bootstrap 4 js -->
 <script src="<?= base_url('assets/'); ?>js/popper.min.js"></script>
 <script src="<?= base_url('assets/'); ?>js/bootstrap.min.js"></script>
@@ -44,6 +44,55 @@
 <script src="<?= base_url('assets/'); ?>js/scripts.js"></script>
 <script src="<?= base_url('assets/'); ?>js/sweetalert2.all.min.js"></script>
 <script src="<?= base_url('assets/'); ?>js/myscript.js"></script>
+<!-- upload -->
+<script src="<?php print base_url('assets/') ?>upload/jquery.uploadfile.min.js"></script>
+
+<script>
+    var count = 0;
+    $("#customupload1").uploadFile({
+        url: "<?php echo base_url('File_arsip/upload'); ?>",
+        // multiple: true,
+        dragDrop: true,
+        allowedTypes: "ppt,doc,docx,pdf,txt,pptx,csv,xlsx,xls,jpg,jpeg,png,gif",
+        acceptFiles: "file/*",
+        fileName: "file",
+        showDelete: true,
+        showProgress: true,
+        allowDuplicates: true,
+        maxFileSize: 6024 * 1024,
+        maxFileCount: 1,
+        showFileCounter: false,
+        returnType: "json",
+        sizeErrorStr: "Maksimal File Size :",
+        uploadErrorStr: "Upload Gagal Mohon Di cek kembali",
+        maxFileCountErrorStr: "Upload File Diperbolehkan : ",
+        duplicateErrorStr: "File Sudah Ada",
+        onSubmit: function(files) {
+            $("#eventsmessage").html($("#eventsmessage").html() + "<br/>Submitting:" + JSON.stringify(files));
+            document.getElementById("btn_upload").disabled = true;
+            // return true;
+        },
+        onSuccess: function(files, data, xhr, pd) {
+            $("#eventsmessage").html($("#eventsmessage").html() + "<br/>Success for: " + JSON.stringify(data));
+            document.getElementById("btn_upload").disabled = false;
+        },
+        deleteCallback: function(data, pd) {
+            for (var i = 0; i < data.length; i++) {
+                $.post("<?php echo base_url('File_arsip/delfile'); ?>", {
+                        op: "delete",
+                        name: data[i]
+                    },
+                    function(resp, textStatus, jqXHR) {
+                        //Show Message	
+                        alert("File Deleted");
+                    });
+            }
+            pd.statusbar.hide(); //You choice.
+        }
+    });
+</script>
+
+
 <script>
     $(document).ready(function() {
         $('#table_id').DataTable();

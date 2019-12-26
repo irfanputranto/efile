@@ -40,7 +40,9 @@ $user['parammenu'] = $_user->getidmenu($_GET['menuId']);
                                 </div>
                                 <div class="form-group row" id="btn-pc">
                                     <div class="col">
-                                        <input type="file" name="image" id="file-1" class="form-control">
+                                        <!-- <input type="file" name="image" id="file-1" class="form-control"> -->
+                                        <div id="customupload1">Upload</div>
+                                        <div>Max Size Upload File : 5MB</div>
                                     </div>
                                 </div>
 
@@ -56,7 +58,7 @@ $user['parammenu'] = $_user->getidmenu($_GET['menuId']);
                                     </div>
                                 </div>
                                 <hr>
-                                <button type="submit" class="btn btn-primary mt-4 pr-4 pl-4">Simpan</button>
+                                <button type="submit" id="btn_upload" class="btn btn-primary mt-4 pr-4 pl-4">Simpan</button>
                                 <a href="<?= base_url('file_arsip/tampilfile') . '?menuId=' . $user['parammenu'] ?>" class="btn btn-danger mt-4 pr-4 pl-4">Kembali</a>
                             </form>
                         </div>

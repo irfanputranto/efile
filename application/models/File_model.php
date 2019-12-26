@@ -48,17 +48,10 @@ class File_model extends CI_Model
         $nosurat = htmlspecialchars($this->input->post('nosurat', true));
         $user = htmlspecialchars($this->input->post('user', true));
 
-        // $idd = $this->db->get_where('menu',['']);
-
-        $config['upload_path']          = './upload/';
-        $config['allowed_types']        = 'gif|jpg|png|pdf|docx|doc';
-        $this->load->library('upload', $config);
-        $this->upload->initialize($config);
-        if ($this->upload->do_upload('image')) {
-            $config['overwrite'] = TRUE;
-            $upload_data = array('upload_data' => $this->upload->data());
-            $img = $upload_data['upload_data']['file_name'];
-             $tandabaca = array(
+        $images = $this->session->userdata('filename');
+        if ($images) {
+            $img = $images['name'];
+            $tandabaca = array(
                 ' ',
                 ',',
                 '(',
@@ -66,9 +59,9 @@ class File_model extends CI_Model
                 '/',
                 '<',
                 '>',
-              );
-              $image = str_replace($tandabaca, '_', $img);
-              rename('./upload/' . $img, './upload/' . $image);
+            );
+            $image = str_replace($tandabaca, '_', $img);
+            rename('./upload/' . $img, './upload/' . $image);
             $data = [
                 'menu_id' => $iddm,
                 'loc_file' => $image,
@@ -77,7 +70,7 @@ class File_model extends CI_Model
                 'log_user' => $user
             ];
         } elseif ($fileftp != null) {
-             $tandabaca = array(
+            $tandabaca = array(
                 ' ',
                 ',',
                 '(',
@@ -85,7 +78,7 @@ class File_model extends CI_Model
                 '/',
                 '<',
                 '>',
-              );
+            );
             $filename = str_replace($tandabaca, '_', $fileftp);
             rename('./ftp/' . $fileftp, './upload/' . $filename);
             $data = [
@@ -106,6 +99,7 @@ class File_model extends CI_Model
             redirect('file_arsip/tampilfile' . '?menuId=' . $iddm);
         }
         $this->db->insert('arsip', $data);
+        $this->session->unset_userdata('filename');
     }
 
     public function ubahFileArsip($id)
@@ -116,20 +110,27 @@ class File_model extends CI_Model
         $user = $this->input->post('user', true);
         $desk = $this->input->post('deskripsi', true);
         $nosurat = $this->input->post('nosurat', true);
-        $config['upload_path']          = './upload/';
-        $config['allowed_types']        = 'gif|jpg|png|pdf|docx|doc';
-        $this->load->library('upload', $config);
-        $this->upload->do_upload('image');
-        $upload_data = array('upload_data' => $this->upload->data());
-        $img = $upload_data['upload_data']['file_name'];
+        $images = $this->session->userdata('filename');
+        $img = $images['name'];
         // $image_new = '';
         $file = $query['loc_file'];
 
         if ($img != '') {
             if (@unlink(FCPATH . 'upload/' . $file) == TRUE) {
+                $tandabaca = array(
+                    ' ',
+                    ',',
+                    '(',
+                    ')',
+                    '/',
+                    '<',
+                    '>',
+                );
+                $image = str_replace($tandabaca, '_', $img);
+                rename('./upload/' . $img, './upload/' . $image);
                 $data = [
                     // 'menu_id' => $iddm,
-                    'loc_file' => $img,
+                    'loc_file' => $image,
                     'desc_file' => $desk,
                     'nama_file' => $nosurat,
                     'log_user' => $user
@@ -139,7 +140,7 @@ class File_model extends CI_Model
             }
         } elseif ($fileftp != '') {
             if (@unlink(FCPATH . 'upload/' . $file) == TRUE) {
-                 $tandabaca = array(
+                $tandabaca = array(
                     ' ',
                     ',',
                     '(',
@@ -147,7 +148,7 @@ class File_model extends CI_Model
                     '/',
                     '<',
                     '>',
-                  );
+                );
                 $filename = str_replace($tandabaca, '_', $fileftp);
                 rename('./ftp/' . $fileftp, './upload/' . $filename);
                 $data = [
@@ -170,6 +171,7 @@ class File_model extends CI_Model
             ];
             $this->db->where('id_arsip', $id);
             $this->db->update('arsip', $data);
+            $this->session->unset_userdata('filename');
         }
     }
 

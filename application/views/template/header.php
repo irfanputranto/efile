@@ -35,6 +35,9 @@
     <link rel="stylesheet" href="<?= base_url('assets/'); ?>css/default-css.css">
     <link rel="stylesheet" href="<?= base_url('assets/'); ?>css/styles.css">
     <link rel="stylesheet" href="<?= base_url('assets/'); ?>css/responsive.css">
+
+    <!-- upload -->
+    <link rel="stylesheet" href="<?php print base_url('assets/') ?>upload/uploadfile.css">
     <!-- modernizr css -->
     <script src="<?= base_url('assets/'); ?>js/vendor/modernizr-2.8.3.min.js"></script>
 </head>
